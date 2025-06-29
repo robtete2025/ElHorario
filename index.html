@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>HORARIO SODIMAC</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <div id="login">
+    <h2>Ingreso al sistema</h2>
+    <input type="password" id="password" placeholder="Ingrese contraseña">
+    <button onclick="verificarPassword()">Ingresar</button>
+  </div>
+
+  <div id="contenedorHorario" style="display:none;">
+    <h1>HORARIO SODIMAC</h1>
+    <button id="cerrarSesion" onclick="cerrarSesion()">Cerrar sesión</button>
+
+    <div id="controlMiembros">
+      <input type="text" id="nuevoNombre" placeholder="Nombre del trabajador">
+      <button onclick="agregarMiembro()">Agregar</button>
+      <input type="text" id="busqueda" placeholder="Buscar trabajador" oninput="filtrarMiembros()">
+    </div>
+
+    <div id="listaMiembros"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

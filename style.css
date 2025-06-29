@@ -1,0 +1,102 @@
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(45deg, #1e90ff, #ff0000, #ffff00, #ffffff);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+  padding: 20px;
+  color: #333;
+  text-align: center;
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50% }
+  50% { background-position: 100% 50% }
+  100% { background-position: 0% 50% }
+}
+
+#login {
+  margin-top: 50px;
+}
+
+#cerrarSesion {
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+#cerrarSesion:hover {
+  background-color: #c9302c;
+}
+
+#controlMiembros {
+  margin: 20px auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+#controlMiembros input, #controlMiembros button {
+  padding: 8px;
+  font-size: 14px;
+}
+
+.trabajador {
+  margin: 30px 0;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  padding: 15px;
+  background-color: white;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+.tituloTrabajador {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #444;
+  color: white;
+  padding: 10px;
+  font-size: 18px;
+  border-radius: 6px 6px 0 0;
+}
+
+table {
+  width: 100%;
+  margin: 10px auto;
+  border-collapse: collapse;
+  background-color: white;
+}
+
+th, td {
+  padding: 8px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+th input.fecha {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid #aaa;
+  margin-top: 5px;
+  width: 80px;
+  font-size: 13px;
+  padding: 2px;
+  border-radius: 4px;
+}
+
+td input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: center;
+  padding: 5px;
+}
+
+.destacado {
+  background-color: yellow !important;
+}
