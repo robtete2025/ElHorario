@@ -1,28 +1,19 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-import { getFirestore, collection, doc, getDocs, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
-
-// Configuración de tu Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyD3XtGXXs-HtrUsXirEdn0o-ze_xuD4kJs",
-  authDomain: "sodimacplanor.firebaseapp.com",
-  projectId: "sodimacplanor",
-  storageBucket: "sodimacplanor.firebasestorage.app",
-  messagingSenderId: "1014260848696",
-  appId: "1:1014260848696:web:1aaa749e5a1cc272912ecd",
-  measurementId: "G-HY90ZJVJQ5"
-};
-
-// Inicializar Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
 let modoEditor = false;
 
 document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("login").style.display = "block";
 });
 
-// Verificar contraseña y mostrar interfaz
+function crearHorarioVacio() {
+  return Array.from({ length: 4 }, () => Array(7).fill(""));
+}
+
+async function mostrarControles() {
+  document.getElementById("login").style.display = "none";
+  document.getElementById("contenedorHorario").style.display = "block";
+  await renderizarMiembros();
+}
+
 window.verificarPassword = async function () {
   const pass = document.getElementById("password").value;
   if (pass === "sodimac") {
@@ -36,20 +27,13 @@ window.verificarPassword = async function () {
   }
 };
 
-async function mostrarControles() {
-  document.getElementById("login").style.display = "none";
-  document.getElementById("contenedorHorario").style.display = "block";
-  await renderizarMiembros();
-}
-
-// Agregar trabajador
 window.agregarMiembro = async function () {
   const input = document.getElementById("nuevoNombre");
   const nombre = input.value.trim();
-  if (nombre === "") return;
+  if (!nombre) return;
 
-  const horarioVacio = Array.from({ length: 4 }, () => Array(7).fill(""));
-  await setDoc(doc(db, "trabajadores", nombre), {
+  const horarioVacio = crearHorarioVacio();
+  await db.collection("trabajadores").doc(nombre).set({
     nombre: nombre,
     horario: horarioVacio
   });
@@ -58,13 +42,11 @@ window.agregarMiembro = async function () {
   await renderizarMiembros();
 };
 
-// Eliminar trabajador
 window.eliminarMiembro = async function (nombre) {
-  await deleteDoc(doc(db, "trabajadores", nombre));
+  await db.collection("trabajadores").doc(nombre).delete();
   await renderizarMiembros();
 };
 
-// Buscar trabajadores
 window.filtrarMiembros = function () {
   const filtro = document.getElementById("busqueda").value.toLowerCase();
   const contenedor = document.getElementById("listaMiembros");
@@ -74,18 +56,14 @@ window.filtrarMiembros = function () {
   });
 };
 
-// Renderizar todos los trabajadores
 async function renderizarMiembros() {
   const contenedor = document.getElementById("listaMiembros");
   contenedor.innerHTML = "";
 
-  const querySnapshot = await getDocs(collection(db, "trabajadores"));
+  const snapshot = await db.collection("trabajadores").get();
   const trabajadores = [];
 
-  querySnapshot.forEach(doc => {
-    trabajadores.push(doc.data());
-  });
-
+  snapshot.forEach(doc => trabajadores.push(doc.data()));
   trabajadores.sort((a, b) => a.nombre.localeCompare(b.nombre));
 
   trabajadores.forEach(trabajador => {
@@ -107,12 +85,9 @@ async function renderizarMiembros() {
   });
 }
 
-// Crear tabla por trabajador
 function crearTablaHorario(nombre, horario) {
   const dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
-  const turnos = ["Entrada", "Salida", "Refrigerio", "Capacitación"];
   const tabla = document.createElement("table");
-
   const thead = document.createElement("thead");
   const filaDias = document.createElement("tr");
 
@@ -129,7 +104,6 @@ function crearTablaHorario(nombre, horario) {
 
   for (let fila = 0; fila < 4; fila++) {
     const tr = document.createElement("tr");
-
     for (let col = 0; col < 7; col++) {
       const td = document.createElement("td");
       const input = document.createElement("input");
@@ -144,7 +118,8 @@ function crearTablaHorario(nombre, horario) {
       input.addEventListener("input", async () => {
         horario[fila][col] = input.value;
         td.classList.toggle("destacado", input.value.toLowerCase().includes("vacaciones") || input.value.toLowerCase().includes("libre"));
-        await setDoc(doc(db, "trabajadores", nombre), {
+
+        await db.collection("trabajadores").doc(nombre).set({
           nombre: nombre,
           horario: horario
         });
@@ -153,7 +128,6 @@ function crearTablaHorario(nombre, horario) {
       td.appendChild(input);
       tr.appendChild(td);
     }
-
     tbody.appendChild(tr);
   }
 
@@ -161,7 +135,6 @@ function crearTablaHorario(nombre, horario) {
   return tabla;
 }
 
-// Cerrar sesión
 window.cerrarSesion = function () {
   document.getElementById("contenedorHorario").style.display = "none";
   document.getElementById("login").style.display = "block";
