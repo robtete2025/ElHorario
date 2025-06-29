@@ -3,28 +3,122 @@
 <head>
   <meta charset="UTF-8">
   <title>HORARIO SODIMAC</title>
-  <link rel="stylesheet" href="estilos.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #ffffff, #ffeb3b, #f44336, #2196f3);
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      background-color: #000;
+      color: white;
+      padding: 20px;
+    }
+
+    #login {
+      text-align: center;
+      padding: 30px;
+    }
+
+    #contenedorHorario {
+      display: none;
+      padding: 20px;
+    }
+
+    .trabajador {
+      margin: 30px 0;
+      background: #fff;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .tituloTrabajador {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #2196f3;
+      color: white;
+      padding: 10px;
+      font-weight: bold;
+      border-radius: 10px 10px 0 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+
+    input[type="text"] {
+      width: 95%;
+      padding: 5px;
+      border: none;
+      outline: none;
+    }
+
+    th {
+      background-color: #f1f1f1;
+    }
+
+    .destacado {
+      background-color: yellow;
+    }
+
+    #acciones {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    #acciones input, #acciones button {
+      margin: 5px;
+      padding: 10px;
+    }
+  </style>
 </head>
 <body>
+  <h1>HORARIO SODIMAC</h1>
+
   <div id="login">
-    <h2>Ingreso al sistema</h2>
-    <input type="password" id="password" placeholder="Ingrese contraseña">
+    <input type="password" id="password" placeholder="Contraseña">
     <button onclick="verificarPassword()">Ingresar</button>
   </div>
 
-  <div id="contenedorHorario" style="display:none;">
-    <h1>HORARIO SODIMAC</h1>
-    <button id="cerrarSesion" onclick="cerrarSesion()">Cerrar sesión</button>
-
-    <div id="controlMiembros">
-      <input type="text" id="nuevoNombre" placeholder="Nombre del trabajador">
-      <button onclick="agregarMiembro()">Agregar</button>
-      <input type="text" id="busqueda" placeholder="Buscar trabajador" oninput="filtrarMiembros()">
+  <div id="contenedorHorario">
+    <div id="acciones">
+      <input type="text" id="nuevoNombre" placeholder="Nuevo trabajador">
+      <button onclick="agregarMiembro()">Añadir</button>
+      <input type="text" id="busqueda" placeholder="Buscar..." oninput="filtrarMiembros()">
+      <button onclick="cerrarSesion()">Cerrar sesión</button>
     </div>
 
     <div id="listaMiembros"></div>
   </div>
 
+  <!-- FIREBASE compat CDN -->
+  <script src="https://www.gstatic.com/firebasejs/11.8.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyD3XtGXXs-HtrUsXirEdn0o-ze_xuD4kJs",
+      authDomain: "sodimacplanor.firebaseapp.com",
+      projectId: "sodimacplanor",
+      storageBucket: "sodimacplanor.firebasestorage.app",
+      messagingSenderId: "1014260848696",
+      appId: "1:1014260848696:web:1aaa749e5a1cc272912ecd",
+      measurementId: "G-HY90ZJVJQ5"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  </script>
+
+  <!-- Tu script de lógica -->
   <script src="script.js"></script>
 </body>
 </html>
